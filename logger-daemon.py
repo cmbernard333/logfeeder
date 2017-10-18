@@ -5,6 +5,7 @@ import logging.handlers
 import os
 import signal
 import sys
+from datetime import datetime
 from time import sleep
 
 log_level_map = {
@@ -46,7 +47,7 @@ def get_args():
 
 def do_logging(log,loglevel):
     while daemon_stop == False:
-        log.log(loglevel,"This is a test log message")
+        log.log(loglevel,"{} This is a test log message".format(datetime.now()))
         sleep(3)
     log.log(logging.CRITICAL,"Shutting down!")
 
