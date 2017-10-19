@@ -28,7 +28,7 @@ docker stop logfeeder && docker rm logfeeder
 
 docker build --no-cache ${TAGS_STR} -f $DOCKERFILE .
 if [ "$RUN" = "true" ]; then
-	# --volumes-from attachs to the volumes presented by logdemon in its Dockerfile
-	docker run -d --name logfeeder --volumes-from logdemon $LATEST_TAG 
+	# mounting docker volume 'rsyslog-remote' to /var/run/rsyslog/dev to get access to the 'log' socket
+	docker run -d --name logfeeder --mount src=rsyslog-remote,dst=/var/run/rsyslog $LATEST_TAG 
 fi
 
