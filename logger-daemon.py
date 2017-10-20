@@ -43,12 +43,13 @@ def get_args():
     parser.add_argument("-a","--address", help="Address to logging location", nargs='?', const=1, type=str, default='/dev/log')
     parser.add_argument("-n","--name", help="The name used by the logger", nargs='?', const=1, type=str, default=__name__)
     parser.add_argument("-v","--verbose", help="Enable verbose logging", action="store_true", default=False)
+    parser.add_argument("-i","--interval", help="Interval to log messages", nargs='?', const=1, type=int, default=3)
     return parser.parse_args()
 
-def do_logging(log,loglevel):
+def do_logging(log,loglevel,interval=3):
     while daemon_stop == False:
         log.log(loglevel,"{} This is a test log message".format(datetime.now()))
-        sleep(3)
+        sleep(interval)
     log.log(logging.CRITICAL,"Shutting down!")
 
 def main():
@@ -57,7 +58,7 @@ def main():
     if verbose == True:
         print(args)
     log = setup_logging(args.address, args.log_level, args.name)
-    do_logging(log,args.log_level)
+    do_logging(log,args.log_level, args.interval)
     sys.exit(0)
 
 if __name__ == "__main__":
