@@ -49,7 +49,8 @@ def get_args():
 def do_logging(log,loglevel,interval=3):
     while daemon_stop == False:
         log.log(loglevel,"{} This is a test log message".format(datetime.now()))
-        sleep(interval)
+        if interval > 0:
+            sleep(interval)
     log.log(logging.CRITICAL,"Shutting down!")
 
 def main():
