@@ -2,8 +2,15 @@
 if [ -e /var/run/rsyslog/dev ]; then
     ln -sf /var/run/rsyslog/dev/log /dev/log
 fi
+ARGS=()
 # configurable logging interval
 if [ -n "$LOGGER_INTERVAL" ]; then
-    LOGGER_ARG="-i $LOGGER_INTERVAL"
+    ARGS+=("-i $LOGGER_INTERVAL")
 fi
-exec "$@" "$LOGGER_ARG"
+# configurable logging messages sent per interval
+if [ -n "$LOGGER_MESSAGES" ]; then
+    ARGS+=("-m $LOGGER_MESSAGES")
+fi
+ARGS+=("-v")
+
+exec "$@" "${ARGS[@]}"
