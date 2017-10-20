@@ -6,4 +6,4 @@ RUN apt-get update && apt-get install -y bsdutils coreutils python3
 COPY logger-daemon.py /usr/local/bin/logger-daemon
 COPY logger-entrypoint.sh /
 ENTRYPOINT [ "/logger-entrypoint.sh" ]
-CMD ["/usr/bin/python3","/usr/local/bin/logger-daemon","-i","1"]
+CMD ["/usr/bin/python3","/usr/local/bin/logger-daemon"]

@@ -43,12 +43,14 @@ def get_args():
     parser.add_argument("-a","--address", help="Address to logging location", nargs='?', const=1, type=str, default='/dev/log')
     parser.add_argument("-n","--name", help="The name used by the logger", nargs='?', const=1, type=str, default=__name__)
     parser.add_argument("-v","--verbose", help="Enable verbose logging", action="store_true", default=False)
-    parser.add_argument("-i","--interval", help="Interval to log messages", nargs='?', const=1, type=int, default=3)
+    parser.add_argument("-i","--interval", help="Interval to log messages", nargs='?', const=1, type=int, default=1)
+    parser.add_argument("-m","--messages", help="The number of messages to generate", nargs='?', cont=1, type=int, default=1)
     return parser.parse_args()
 
-def do_logging(log,loglevel,interval=3):
+def do_logging(log,loglevel,interval=1,messages=1):
     while daemon_stop == False:
-        log.log(loglevel,"{} This is a test log message".format(datetime.now()))
+        for i in range(0,messages):
+            log.log(loglevel,"{} This is a test log message".format(datetime.now()))
         if interval > 0:
             sleep(interval)
     log.log(logging.CRITICAL,"Shutting down!")
