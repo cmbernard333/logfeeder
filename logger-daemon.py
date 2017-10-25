@@ -30,8 +30,9 @@ signal.signal(signal.SIGINT, signal_handler)
 def setup_logging(addr,loglevel,name):
     log = logging.getLogger(name)
     log.setLevel(loglevel)
-    handler = logging.handlers.SysLogHandler(address=addr)
-    formatter = logging.Formatter('%(module)s.%(funcName)s: %(message)s')
+    handler = logging.handlers.SysLogHandler(address=addr, facility=logging.handlers.SysLogHandler.LOG_DAEMON) # set the facility for syslog messages
+    # formatter = logging.Formatter('%(module)s.%(funcName)s: %(message)s')
+    formatter = logging.Formatter('%(asctime)s %(name)s: %(levelname)s %(message)s', '%b %e %H:%M:%S') # match syslog format
     handler.setFormatter(formatter)
     log.addHandler(handler)
     return log
@@ -43,14 +44,14 @@ def get_args():
     parser.add_argument("-a","--address", help="Address to logging location", nargs='?', const=1, type=str, default='/dev/log')
     parser.add_argument("-n","--name", help="The name used by the logger", nargs='?', const=1, type=str, default=__name__)
     parser.add_argument("-v","--verbose", help="Enable verbose logging", action="store_true", default=False)
-    parser.add_argument("-i","--interval", help="Interval to log messages", nargs='?', const=1, type=int, default=1)
+    parser.add_argument("-i","--interval", help="Interval to log messages", nargs='?', const=1, type=float, default=1)
     parser.add_argument("-m","--messages", help="The number of messages to generate", nargs='?', const=1, type=int, default=1)
     return parser.parse_args()
 
 def do_logging(log,loglevel,interval=1,messages=1):
     while daemon_stop == False:
         for i in range(0,messages):
-            log.log(loglevel,"{} - ({}) This is a test log message".format(datetime.now(),i))
+            log.log(loglevel,"({}) This is a test log message".format(i))
         if interval > 0:
             sleep(interval)
     log.log(logging.CRITICAL,"Shutting down!")
